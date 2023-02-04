@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  elevatus-backed:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - mongodb-elevatus
+
+  mongodb-elevatus:
+    image: bitnami/mongodb:latest
+    env_file:
+      - .env
+    environment:
+      - "MONGO_INITDB_DATABASE=${MONGO_DB}"
+    ports:
+      - "27020:27017"
+    volumes:
+      - elevatus-mongo-data:/bitnami/mongodb
+
+volumes:
+  elevatus-mongo-data:
